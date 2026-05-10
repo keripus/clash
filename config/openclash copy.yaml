@@ -1,0 +1,104 @@
+[YAML]
+dns!:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter: ['*.lan', '*.local', '*.localdomain', '*.home.arpa', 'localhost', '*.u53e3.com', 'u53e3.com', '*.2722222.xyz', '*.ascwqw.org', 'pplinks.ascwqw.org', 'oneinlink.ascwqw.org', 'doh.pub', 'dns.alidns.com', 'dns.google', 'time.apple.com', 'time.windows.com', 'time.cloudflare.com', 'time1.cloud.tencent.com', 'ntp.aliyun.com', 'ntp.tencent.com', 'ntp.ntsc.ac.cn', '*.pool.ntp.org', 'connectivitycheck.gstatic.com', 'connectivitycheck.android.com', 'www.msftconnecttest.com', 'www.msftncsi.com', 'captive.apple.com', 'detectportal.firefox.com', 'stun.l.google.com', 'stun1.l.google.com', 'stun2.l.google.com', 'stun3.l.google.com', 'stun4.l.google.com', 'stun.*.*', 'stun.*.*.*', '*.stun.*.*', '*.stun.*.*.*']
+  default-nameserver: ["119.29.29.29", "223.5.5.5"]
+  nameserver: ["https://doh.pub/dns-query", "https://dns.alidns.com/dns-query"]
+  nameserver-policy:
+    "geosite:geolocation-!cn": ["https://1.1.1.1/dns-query", "https://8.8.8.8/dns-query"]
+    #"geosite:youtube,google,github,amazon,cloudflare,docker,reddit,x,instagram,facebook": ["https://1.1.1.1/dns-query", "https://8.8.8.8/dns-query"]
+
+proxy-groups!:
+  - name: "通用代理"
+    type: select
+    include-all-proxies: true
+    filter: '^(?!.*(Traffic|Expire|流量|到期|剩余|官网|提示)).*$'
+    
+  - name: 'AI'
+    type: select
+    include-all-proxies: true
+    filter: '^(?!.*(Traffic|Expire|流量|到期|剩余|官网|提示)).*$'
+    
+  - name: 'YouTube'
+    type: select
+    include-all-proxies: true
+    filter: '^(?!.*(Traffic|Expire|流量|到期|剩余|官网|提示)).*$'
+    
+  - name: 'Google'
+    type: select
+    include-all-proxies: true
+    filter: '^(?!.*(Traffic|Expire|流量|到期|剩余|官网|提示)).*$'
+    
+  - name: 'Apple'
+    type: select
+    include-all-proxies: true
+    filter: '^(?!.*(Traffic|Expire|流量|到期|剩余|官网|提示)).*$'
+    
+  - name: 'Steam'
+    type: select
+    include-all-proxies: true
+    filter: '^(?!.*(Traffic|Expire|流量|到期|剩余|官网|提示)).*$'
+    
+  - name: 'Final'
+    type: select
+    include-all-proxies: true
+    filter: '^(?!.*(Traffic|Expire|流量|到期|剩余|官网|提示)).*$'
+    
+  - name: '拨号底座-全节点池'
+    type: select
+    include-all-proxies: true
+    filter: '^(?!.*(Traffic|Expire|流量|到期|剩余|官网|提示)).*$'
+    
+rules!:
+  - "PROCESS-NAME,clash,DIRECT"
+
+  - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
+  - "IP-CIDR,10.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,172.16.0.0/12,DIRECT,no-resolve"
+  - "IP-CIDR,127.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,100.64.0.0/10,DIRECT,no-resolve"
+  - "IP-CIDR6,::1/128,DIRECT,no-resolve"
+  - "IP-CIDR6,fc00::/7,DIRECT,no-resolve"
+  - "IP-CIDR6,fe80::/10,DIRECT,no-resolve"
+  - "IP-CIDR6,fd00::/8,DIRECT,no-resolve"
+  - "DOMAIN-SUFFIX,local,DIRECT"
+
+  - "DOMAIN-SUFFIX,ping0.cc,AI"
+  #"DOMAIN-SUFFIX,gemini.google.com,AI"
+  - "DOMAIN-SUFFIX,anthropic.com,AI"
+  - "DOMAIN-SUFFIX,claude.ai,AI"
+  - "DOMAIN-SUFFIX,openai.com,AI"
+
+  - "GEOSITE,youtube,YouTube"
+  - "GEOSITE,google,Google"
+  - "GEOSITE,apple,Apple"
+  - "GEOSITE,steam,Steam"
+  - "GEOSITE,github,通用代理"
+  - "GEOSITE,amazon,通用代理"
+  - "GEOSITE,cloudflare,通用代理"
+  - "GEOSITE,docker,通用代理"
+  - "GEOSITE,reddit,通用代理"
+  - "GEOSITE,x,通用代理"
+  - "GEOSITE,instagram,通用代理"
+  - "GEOSITE,facebook,通用代理"
+  - "DOMAIN-SUFFIX,ipleak.net,通用代理"
+  - "DOMAIN-SUFFIX,surfshark.com,通用代理"
+  - "DOMAIN-SUFFIX,surfsharkdns.com,通用代理"
+
+  - "DOMAIN-SUFFIX,totheglory.im,DIRECT"
+  - "DOMAIN-SUFFIX,m-team.cc,DIRECT"
+
+  - "GEOIP,CN,DIRECT,no-resolve"
+  - "GEOIP,CN,DIRECT"
+  - "MATCH,Final"
+
+tun:
+  enable: true
+  stack: "mixed"
+  auto-route: true
+  strict-route: true
+  auto-detect-interface: true
+  dns-hijack: ["any:53", "tcp://any:53"]
